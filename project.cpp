@@ -4,16 +4,20 @@
 #include<ctype.h>
 #include<conio.h>
 #include<fstream>
+#include <cstdlib>
+#include<ctime>
 using namespace std;
+
 
 //class having the record of customer
 class bill{
      private:
+    int customer_no; 
      int choice;
      int tel_no;
-     char name[60];
-     char addr[300];
-     char city[40];
+     string name;
+     string addr;
+     string city;
      int net_calls;
      int free_calls;
      int charge_calls;
@@ -28,7 +32,18 @@ class bill{
       void customer();
       void add();
       void showdata();
+      void calculate();
    };
+   
+   void bill::calculate(){
+   	
+   	charge_calls = net_calls - free_calls;
+   	net_charge = float(charge_calls)*0.20;
+   	tax = net_charge*0.13;
+   	gross_amt = net_charge + tax;
+   }
+   
+   
    void bill::menu(){
       p:
       system("cls");
@@ -130,21 +145,26 @@ class bill{
    {
       system("cls");
       fstream file;
-      cout<<"\n\n\t\t Add new record";
-      cout<<"\n Telephone no:  "<<endl;
+      srand(time(0));
+      cout<<"\n\n\t\t Add new record"<<endl;
+      customer_no = 1000 + (rand() % 10000);
+      cout<<"Customer number: "<<customer_no;
+      cout<<"\n Telephone no:  ";
       cin>>tel_no;
-      cout<<"Name:"<<endl;
-      cin>>name;
-      cout<<"Address:"<<endl;
-      cin>>addr;
-      cout<<"City:"<<endl;
-      cin>>city;
-      cout<<"Total calls made:"<<endl;
+      cout<<"Name: ";
+      getline(cin>>ws,name);
+      cout<<"Address:" ;
+      getline(cin,addr);
+      cout<<"City: ";
+      getline(cin,city);
+      cout<<"Total calls made: ";
       cin>>net_calls;
-      cout<<"Free calls allowed"<<endl;
+      cout<<"Free calls allowed: ";
       cin>>free_calls;
-      cout<<"Tax to be paid:"<<endl;
-      cin>>tax;
+      calculate();
+      cout<<"Charged calls: "<<charge_calls<<endl;
+      cout<<"Tax to be paid:"<<tax<<endl;
+      cout<<"Net Charge: "<<net_charge<<endl;
    }
    int main(){
       bill b;
@@ -152,6 +172,3 @@ class bill{
       return 0;
    }
    
-  
-
-
