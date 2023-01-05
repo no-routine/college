@@ -3,8 +3,7 @@
 #include<process.h>
 #include<ctype.h>
 #include<conio.h>
-#include<fstream>
-#include <cstdlib>
+#include<cstdlib>
 #include<ctime>
 using namespace std;
 
@@ -35,16 +34,16 @@ class bill{
       void calculate();
    };
    
-   void bill::calculate(){
+   void bill::calculate(){//function to calculate charge calls, net charge and gross amt
    	
    	charge_calls = net_calls - free_calls;
-   	net_charge = float(charge_calls)*0.20;
+   	net_charge = charge_calls*2;
    	tax = net_charge*0.13;
    	gross_amt = net_charge + tax;
    }
    
    
-   void bill::menu(){
+   void bill::menu(){//menu to allow user to chose between admin or customer
       p:
       system("cls");
       int choice;
@@ -62,7 +61,7 @@ class bill{
             system("cls");       
             cout<<"\n\n\t\tLogin system";
             cout<<"\n\n Password:";
-            for (int i=1;i<=6;i++){
+            for (int i=1;i<=6;i++){//create password for admin login 
                ch=getch();
                pass += ch;
                cout<<"*";
@@ -144,7 +143,6 @@ class bill{
    void bill::add()//function for adding new customer record
    {
       system("cls");
-      fstream file;
       srand(time(0));
       cout<<"\n\n\t\t Add new record"<<endl;
       customer_no = 1000 + (rand() % 10000);
@@ -163,8 +161,10 @@ class bill{
       cin>>free_calls;
       calculate();
       cout<<"Charged calls: "<<charge_calls<<endl;
-      cout<<"Tax to be paid:"<<tax<<endl;
       cout<<"Net Charge: "<<net_charge<<endl;
+      cout<<"Tax to be paid:"<<tax<<endl;
+      cout<<"gross amount:"<<gross_amt<<endl;
+      exit(0);
    }
    int main(){
       bill b;
