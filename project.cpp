@@ -5,9 +5,8 @@
 #include<conio.h>
 #include<cstdlib>
 #include<ctime>
+#include<fstream>
 using namespace std;
-
-
 //class having the record of customer
 class bill{
      private:
@@ -25,11 +24,13 @@ class bill{
      float gross_amt;
      long unsigned int net_amt_bef;
      long unsigned int net_amt_aft;
+     fstream phonerecout;
     public:
       void menu();
       void admin();
       void customer();
       void add();
+      void search();
       void showdata();
       void calculate();
    };
@@ -94,8 +95,7 @@ class bill{
       cout<<"\n 2. Search info/record about customer";
       cout<<"\n 3. Edit information/record";
       cout<<"\n 4. Delete record";
-      cout<<"\n 4. Show record";
-      cout<<"\n 6: Go Back";
+      cout<<"\n 5: Go Back";
       cout<<"\n\n Enter your Choice:";
       cin>>choice;
       switch(choice)
@@ -104,14 +104,13 @@ class bill{
             add();
             break;
          case 2:
+         	search()
             break;
          case 3:
             break;
          case 4:
             break;
          case 5:
-            break;
-         case 6:
             menu();  
          default:
             cout<<"\n\n Invalid value..please try again";
@@ -142,6 +141,7 @@ class bill{
    }  
    void bill::add()//function for adding new customer record
    {
+   	phonerecout.open("record.txt",ios::app);
       system("cls");
       srand(time(0));
       cout<<"\n\n\t\t Add new record"<<endl;
@@ -164,7 +164,19 @@ class bill{
       cout<<"Net Charge: "<<net_charge<<endl;
       cout<<"Tax to be paid:"<<tax<<endl;
       cout<<"gross amount:"<<gross_amt<<endl;
-      exit(0);
+      phonerecout<<customer_no<<" "<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<endl;
+      phonerecout.close();
+	  exit(0);
+   }
+   void bill::search()
+   {
+   	phonerecout.open("record.txt",ios::in,ios::binary);
+	   if(!phonerecout){
+	   	cout<<"\nFile not found";
+	   }
+	   else{
+	   	phonerecout.read()
+	   }
    }
    int main(){
       bill b;
