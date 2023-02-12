@@ -24,7 +24,7 @@ class bill{
      float gross_amt;
      long unsigned int net_amt_bef;
      long unsigned int net_amt_aft;
-     fstream phonerecout;
+     fstream file;
     public:
       void menu();
       void admin();
@@ -104,7 +104,7 @@ class bill{
             add();
             break;
          case 2:
-         	search()
+         	
             break;
          case 3:
             break;
@@ -140,13 +140,15 @@ class bill{
       goto p;
    }  
    void bill::add()//function for adding new customer record
-   {
-   	phonerecout.open("record.txt",ios::app);
+   {  p:
+   	  int t;
+   	  string na;
+	  string a;	
+	  string k;
+	  int n, f, c, found=0;
+	  float net, tax, gross;  
       system("cls");
-      srand(time(0));
       cout<<"\n\n\t\t Add new record"<<endl;
-      customer_no = 1000 + (rand() % 10000);
-      cout<<"Customer number: "<<customer_no;
       cout<<"\n Telephone no:  ";
       cin>>tel_no;
       cout<<"Name: ";
@@ -164,19 +166,29 @@ class bill{
       cout<<"Net Charge: "<<net_charge<<endl;
       cout<<"Tax to be paid:"<<tax<<endl;
       cout<<"gross amount:"<<gross_amt<<endl;
-      phonerecout<<customer_no<<" "<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<endl;
-      phonerecout.close();
-	  exit(0);
-   }
-   void bill::search()
-   {
-   	phonerecout.open("record.txt",ios::in,ios::binary);
-	   if(!phonerecout){
-	   	cout<<"\nFile not found";
-	   }
-	   else{
-	   	phonerecout.read()
-	   }
+      file.open("record.txt",ios::in);
+	  if(!file){
+	  		file.open("record.txt", ios::app|ios::out);
+	  		file<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<endl;
+			file.close();	  
+	  	}
+	  else{
+	  	file>>t>>na>>a>>k>>n>>f>>c>>net>>tax>>gross;
+			while(!file.eof()){
+	  	   			if(t == tel_no){
+	  					found++;	
+	  				}
+		  		file>>t>>na>>a>>k>>n>>f>>c>>net>>tax>>gross;
+	 	 	}
+	 	}
+	 	 	file.close();
+	 	 	if(found == 1)
+	 	 	goto p; 
+	 	 	else{
+			 	file.open("record.txt", ios::app|ios::out);
+			  	file<<customer_no<<" "<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<endl;
+				file.close();	  
+			  }
    }
    int main(){
       bill b;
