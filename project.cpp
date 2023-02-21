@@ -10,7 +10,6 @@ using namespace std;
 //class having the record of customer
 class bill{
      private:
-    int customer_no; 
      int choice;
      int tel_no;
      string name;
@@ -31,8 +30,11 @@ class bill{
       void customer();
       void add();
       void search();
-      void showdata();
+      void edit();
+      void dele();
+      void show();
       void calculate();
+      void infor();
    };
    
    void bill::calculate(){//function to calculate charge calls, net charge and gross amt
@@ -95,7 +97,8 @@ class bill{
       cout<<"\n 2. Search info/record about customer";
       cout<<"\n 3. Edit information/record";
       cout<<"\n 4. Delete record";
-      cout<<"\n 5: Go Back";
+      cout<<"\n 5. Show record";
+      cout<<"\n 6: Go Back";
       cout<<"\n\n Enter your Choice:";
       cin>>choice;
       switch(choice)
@@ -104,16 +107,22 @@ class bill{
             add();
             break;
          case 2:
-         	
+         	search();
             break;
          case 3:
+         	edit();
             break;
          case 4:
+         	dele();
             break;
          case 5:
-            menu();  
+            show();
+			break; 
+		 case 6:
+		 	menu(); 
          default:
             cout<<"\n\n Invalid value..please try again";
+            exit(0);
       }
       getch();
       goto p;
@@ -130,26 +139,27 @@ class bill{
       switch(choice)
       {
          case 1:
+         	infor();
             break;
          case 2:
             menu();
          default:
             cout<<"\n\n Invalid value..please try again";
+            exit(0);
       }
       getch();
       goto p;
    }  
    void bill::add()//function for adding new customer record
-   {  p:
-   	  int t;
-   	  string na;
-	  string a;	
-	  string k;
-	  int n, f, c, found=0;
-	  float net, tax, gross;  
-      system("cls");
+   { 
+      p:
+	  system("cls");
+      fstream file;
+      int tel,ne,f,charge, found=0;
+      string n,a,c;
+      float t, gross, net;
       cout<<"\n\n\t\t Add new record"<<endl;
-      cout<<"\n Telephone no:  ";
+      cout<<"\n Telephone no: ";
       cin>>tel_no;
       cout<<"Name: ";
       getline(cin>>ws,name);
@@ -166,30 +176,245 @@ class bill{
       cout<<"Net Charge: "<<net_charge<<endl;
       cout<<"Tax to be paid:"<<tax<<endl;
       cout<<"gross amount:"<<gross_amt<<endl;
-      file.open("record.txt",ios::in);
-	  if(!file){
-	  		file.open("record.txt", ios::app|ios::out);
-	  		file<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<endl;
-			file.close();	  
-	  	}
-	  else{
-	  	file>>t>>na>>a>>k>>n>>f>>c>>net>>tax>>gross;
-			while(!file.eof()){
-	  	   			if(t == tel_no){
-	  					found++;	
-	  				}
-		  		file>>t>>na>>a>>k>>n>>f>>c>>net>>tax>>gross;
-	 	 	}
-	 	}
-	 	 	file.close();
-	 	 	if(found == 1)
-	 	 	goto p; 
-	 	 	else{
-			 	file.open("record.txt", ios::app|ios::out);
-			  	file<<customer_no<<" "<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<endl;
-				file.close();	  
+      file.open("data.txt",ios::in);
+      if(!file)
+      {
+      	file.open("data.txt",ios::app|ios::out);
+      	file<<" "<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<"\n";
+		file.close();   
+	  }
+	  else
+	  {
+	  	file>>tel>>n>>a>>c>>ne>>f>>charge>>net>>t>>gross;
+	  	while(!file.eof())
+	  	{
+	  		if (tel == tel_no)
+	  		{
+	  			found=found+1;
 			  }
+			  file>>tel>>n>>a>>c>>ne>>f>>charge>>net>>t>>gross;
+		  }
+		  file.close();
+		  if(found == 1){
+		  	cout<<"Telephone no already exists."<<endl;
+		  	goto p;
+		  }
+		  else
+		  {
+		  	file.open("data.txt",ios::app|ios::out);
+      		file<<" "<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<"\n";
+			file.close();   
+		  }
+	  }
    }
+   void bill::search() //search function of bill class
+   {
+   	system("cls");
+   	fstream file;
+   	int t_n, found=0;
+	cout<<"\n\n\t\t\Search record";
+   	cout<<"\n\n Enter the telephone no to search: ";
+   	cin>>t_n;
+   	file.open("data.txt",ios::in);
+   	if(!file)
+   	{
+   		cout<<"\n\n File doesn't exist..";
+	   }
+	   else
+	   {
+	   	file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+	   	while(!file.eof())
+	   	{
+	   		if(t_n == tel_no)
+	   		{
+	   			system("cls");
+	   			cout<<"\n\n\t\tSearch record";
+	   			cout<<"\n\n Telephone no: "<<tel_no;
+	   			cout<<"\n\n Name: "<<name;
+	   			cout<<"\n\n Address: "<<addr;
+	   			cout<<"\n\n City: "<<city;
+	   			cout<<"\n\n Total calls made: "<<net_calls;
+	   			cout<<"\n\n Free calls: "<<free_calls;
+	   			cout<<"\n\n Charge Calls: "<<charge_calls;
+	   			cout<<"\n\n Net Charge: "<<net_charge;
+	   			cout<<"\n\n Tax amount: "<<tax;
+	   			cout<<"\n\n Total amount: "<<gross_amt;
+	   			found++;
+			   }
+			   file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+			   
+		   }
+		   file.close();
+		   if (found == 0){
+		   	cout<<"\n\n Record not found";
+		   }
+	   }	
+   }
+   void bill::edit()//edit function of bill class
+   {
+   	system("cls");
+   	fstream file,file1;
+   	int t_n, found=0,tel,ne,f,charge;
+    string n,a,c;
+    float t, gross, net;
+	cout<<"\n\n\t\t\  Edit record";
+   	cout<<"\n\n Enter the telephone no to edit: ";
+   	cin>>t_n;
+   	file.open("data.txt",ios::in);
+   	if(!file)
+   	{
+   		cout<<"\n\n File opening error..";
+	   }
+	   else
+	   {
+	   	file1.open("data1.txt",ios::app|ios::out);
+	   	file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+	   	while(!file.eof())
+	   	{
+	   		if(t_n == tel_no)
+	   		{
+	   			cout<<"\n\n New Telephone no: ";
+	   			cin>>tel;
+	   			cout<<"\n\n New Name: ";
+				getline(cin>>ws,n);
+	   			cout<<"\n\n New Address: ";
+				cin>>a;
+	   			cout<<"\n\n New City Name: ";
+				cin>>c;
+	   			cout<<"\n\n Total calls made: ";
+				cin>>ne;
+	   			cout<<"\n\n Free calls: ";
+				cin>>f;
+			   	charge = ne - f;
+   				net = charge*2;
+   				t = net*0.13;
+   				gross = net + t;
+	   			cout<<"\n\n Charge Calls: "<<charge;
+	   			cout<<"\n\n Net Charge: "<<net;
+	   			cout<<"\n\n Tax amount: "<<t;
+	   			cout<<"\n\n Total amount: "<<gross;
+	   			file1<<" "<<tel<<" "<<n<<" "<<a<<" "<<c<<" "<<ne<<" "<<f<<" "<<charge<<" "<<net<<" "<<t<<" "<<gross<<endl;
+	   			cout<<"\n\nRecord edited successfully";
+				found++;
+			   }
+			   else{
+			   	file1<<" "<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<"\n";
+			   }
+			   file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+		   }
+		   file.close();
+		   file1.close();
+		   remove("data.txt");
+		   rename("data1.txt","data.txt");
+		   if (found == 0){
+		   	cout<<"\n\n Record not found";
+		   }
+		}   
+	}	
+
+   	void bill::dele()//delete function of bill class
+   	{
+   	system("cls");
+   	fstream file,file1;
+   	int t_n, found=0;
+	cout<<"\n\n\t\t\Delete record";
+   	cout<<"\n\n Enter the telephone no to delete: ";
+   	cin>>t_n;
+   	file.open("data.txt",ios::in);
+   	if(!file)
+   	{
+   		cout<<"\n\n File opening error..";
+	   }
+	   else
+	   {
+	   	file1.open("data1.txt",ios::app|ios::out);
+	   	file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+	   	while(!file.eof())
+	   	{
+	   		if(t_n == tel_no){
+	   			cout<<"\n\n Product deleted sucessfully..";
+	   			found++;
+			   }
+			else{
+				file1<<" "<<tel_no<<" "<<name<<" "<<addr<<" "<<city<<" "<<net_calls<<" "<<free_calls<<" "<<charge_calls<<" "<<net_charge<<" "<<tax<<" "<<gross_amt<<"\n";
+			}   	
+			file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+			}
+		file.close();
+		file1.close();
+		remove("data.txt");
+		rename("data1.txt","data.txt");
+		if (found == 0){
+		cout<<"\n\n Record not found";
+ 		}
+	}
+}
+void bill::show()//show function for bill class
+{
+	system("cls");
+   	fstream file;
+	cout<<"\n\n\t\t\ All records";
+   	file.open("data.txt",ios::in);
+   	if(!file)
+   	{
+   		cout<<"\n\n File opening error..";
+	   }
+	else
+   {
+	   cout<<"\n\n Telephone no\t Name \t\t Address \t City \t\t Total Calls \t Free calls \t Charge calls \t Net charge \t Tax amount \t Gross amount";
+	   file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+	   while(!file.eof())
+	   {
+	   	cout<<"\n "<<tel_no<<"\t "<<name<<"\t "<<addr<<"\t\t "<<city<<"\t "<<net_calls<<"\t\t "<<free_calls<<"\t\t "<<charge_calls<<"\t\t "<<net_charge<<"\t\t\t "<<tax<<"\t\t "<<gross_amt<<endl;
+		file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+		   }	
+	   }
+	   file.close();
+}
+	void bill::infor()//bill generation 
+	{
+		system("cls");
+		fstream file;
+		int t_n, found=0;
+		cout<<"\n\n\t\t\Bill";
+		cout<<"\n\n Enter the telephone no : ";
+		cin>>t_n;
+   	file.open("data.txt",ios::in);
+   	if(!file)
+   	{
+   		cout<<"\n\n File doesn't exist..";
+	   }
+	   else
+	   {
+	   	file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+	   	while(!file.eof())
+	   	{
+	   		if(t_n == tel_no)
+	   		{
+	   			system("cls");
+	   			cout<<"\n\n\t\t Bill";
+	   			cout<<"\n\n Telephone no: "<<tel_no;
+	   			cout<<"\n\n Name: "<<name;
+	   			cout<<"\n\n Address: "<<addr;
+	   			cout<<"\n\n City: "<<city;
+	   			cout<<"\n\n Total calls made: "<<net_calls;
+	   			cout<<"\n\n Free calls: "<<free_calls;
+	   			cout<<"\n\n Charge Calls: "<<charge_calls;
+	   			cout<<"\n\n Net Charge: "<<net_charge;
+	   			cout<<"\n\n Tax amount: "<<tax;
+	   			cout<<"\n\n Total amount: "<<gross_amt;
+	   			found++;
+			   }
+			   file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
+			   
+		   }
+		   file.close();
+		   if (found == 0){
+		   	cout<<"\n\n Record not found";
+		   }
+	   }	
+		}	
+	
    int main(){
       bill b;
       b.menu();
