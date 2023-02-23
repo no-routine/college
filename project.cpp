@@ -6,6 +6,7 @@
 #include<cstdlib>
 #include<ctime>
 #include<fstream>
+#include<iomanip>
 using namespace std;
 //class having the record of customer
 class bill{
@@ -361,11 +362,11 @@ void bill::show()//show function for bill class
 	   }
 	else
    {
-	   cout<<"\n\n Telephone no\t Name \t\t Address \t City \t\t Total Calls \t Free calls \t Charge calls \t Net charge \t Tax amount \t Gross amount";
+	   cout<<left<<setw(15)<< "\n\n Telephone no"<<right<<setw(10)<< "Name"<<setw(15) << "Address" <<setw(15)<< "City" <<setw(15)<<"Total Calls" <<setw(15)<< "Free calls" <<setw(15)<< "Charge calls" <<setw(15)<< "Net charge"<<setw(15)<<  "Tax amount" <<setw(15)<< "Gross amount";
 	   file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
 	   while(!file.eof())
 	   {
-	   	cout<<"\n "<<tel_no<<"\t "<<name<<"\t "<<addr<<"\t\t "<<city<<"\t "<<net_calls<<"\t\t "<<free_calls<<"\t\t "<<charge_calls<<"\t\t "<<net_charge<<"\t\t\t "<<tax<<"\t\t "<<gross_amt<<endl;
+	   	cout<<"\n\n"<<left<<setw(15)<<tel_no<<right<<setw(10)<<name<<setw(15) <<addr<<setw(15) <<city<<setw(15) <<net_calls<<setw(15) <<free_calls<<setw(15) <<charge_calls<<setw(15) <<net_charge<<setw(15) <<tax<<setw(15) <<gross_amt<<endl;
 		file>>tel_no>>name>>addr>>city>>net_calls>>free_calls>>charge_calls>>net_charge>>tax>>gross_amt;
 		   }	
 	   }
