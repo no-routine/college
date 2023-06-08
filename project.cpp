@@ -419,6 +419,7 @@ void bill::show()//show function for bill class
    int main(){
       bill b;
       b.menu();
+	   cout<<"Fork this"<<endl;
       return 0;
    }
    
